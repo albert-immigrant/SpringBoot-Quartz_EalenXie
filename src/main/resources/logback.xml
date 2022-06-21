@@ -123,6 +123,91 @@
             <password></password>
         </connectionSource>
     </appender>
+ <!--   <appender name="amqp"
+              class="org.springframework.amqp.rabbit.logback.AmqpAppender">
+        <host>localhost</host>
+        <port>5672</port>
+&lt;!&ndash;        <virtualHost>/</virtualHost>&ndash;&gt;
+        <username>guest</username>
+        <password>guest</password>
+        <exchangeType>topic</exchangeType>
+&lt;!&ndash;        <exchangeName>demo.log</exchangeName>&ndash;&gt;
+&lt;!&ndash;        <applicationId>demo</applicationId>&ndash;&gt;
+        <routingKeyPattern>test</routingKeyPattern>
+        <contentType>text/plain</contentType>
+        <maxSenderRetries>2</maxSenderRetries>
+        <charset>UTF-8</charset>
+        <layout>
+            <pattern><![CDATA[ %d %p %t [%c] - <%m>%n ]]></pattern>
+        </layout>
+    </appender>
+-->
+  <!--  <appender name="AMQP" class="org.springframework.amqp.rabbit.logback.AmqpAppender">
+
+        &lt;!&ndash;Layout（純文本）而不是格式化的JSON &ndash;&gt;
+        <layout>
+            <pattern>
+                <![CDATA[%d{yyyy-MM-dd HH:mm:ss} [%thread] [%class:%line] %-5level %logger - %msg%n ]]>
+            </pattern>
+        </layout>
+        <host>localhost</host>
+        <port>5672</port>
+        <username>guest</username>
+        <password>guest</password>
+
+        <declareExchange>false</declareExchange>
+        <exchangeType>direct</exchangeType>
+        <exchangeName>log.exchange.direct</exchangeName>
+        <routingKeyPattern>logDirectQueue</routingKeyPattern>
+        <generateId>true</generateId>
+        <charset>UTF-8</charset>
+        <durable>false</durable>
+        <deliveryMode>NON_PERSISTENT</deliveryMode>
+    </appender>-->
+   <!-- <appender name="AMQP" class="org.springframework.amqp.rabbit.logback.AmqpAppender">
+        <layout>
+            <pattern><![CDATA[ %d %p %t [%c] - <%m>%n ]]></pattern>
+        </layout>
+        <addresses>localhost:5672</addresses>
+        <abbreviation>36</abbreviation>
+        <includeCallerData>false</includeCallerData>
+        <applicationId>${AMQP_APP_ID}</applicationId>
+        <routingKeyPattern>%property{applicationId}.%c.%p</routingKeyPattern>
+        <generateId>true</generateId>
+        <charset>UTF-8</charset>
+        <durable>true</durable>
+        <deliveryMode>PERSISTENT</deliveryMode>
+        <declareExchange>true</declareExchange>
+    </appender>-->
+    <appender name="RabbitMq" class="org.springframework.amqp.rabbit.logback.AmqpAppender">
+        <layout>
+            <pattern>
+                {
+                "time": "%date{ISO8601}",
+                "thread": "%thread",
+                "level": "%level",
+                "class": "%logger{36}",
+                "message": "%message"
+                }
+            </pattern>
+        </layout>
+        <host>localhost</host>
+        <port>5672</port>
+        <username>guest</username>
+        <password>guest</password>
+        <exchangeType>direct</exchangeType>
+        <exchangeName>amq.direct</exchangeName>
+        <applicationId>RabbitMq-IT-SE</applicationId>
+        <routingKeyPattern>%property{applicationId}.%c.%p</routingKeyPattern>
+        <generateId>true</generateId>
+        <charset>UTF-8</charset>
+        <durable>true</durable>
+        <abbreviation>36</abbreviation>
+        <deliveryMode>NON_PERSISTENT</deliveryMode>
+        <declareExchange>true</declareExchange>
+
+    </appender>
+
     <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE" />
     <logger name="org.mybatis.logging.Logger" level="TRACE"/>
     <root level="INFO">
@@ -131,5 +216,6 @@
         <appender-ref ref="ExceptionFILE"/>
 <!--        <appender-ref ref="TEST"/>-->
         <appender-ref ref="dbLogTask"/>
+        <appender-ref ref="RabbitMq"/>
     </root>
 </configuration>
