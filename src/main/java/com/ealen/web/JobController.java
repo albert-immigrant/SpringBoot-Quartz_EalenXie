@@ -7,6 +7,8 @@ import com.ealen.web.dto.ModifyCronDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
+import org.springframework.amqp.core.AmqpAdmin;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.validation.annotation.Validated;
@@ -32,11 +34,21 @@ public class JobController {
     @Autowired
     private JobEntityRepository repository;
 
+    @Autowired
+    private AmqpAdmin amqpAdmin;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+
     //初始化启动所有的Job
     @PostConstruct
     public void initialize() {
         try {
             reStartAllJobs();
+            Integer count = (Integer) amqpAdmin.getQueueProperties("log_queue").get("QUEUE_MESSAGE_COUNT");
+        Object ss=    rabbitTemplate.receiveAndConvert("log_queue");
+            log.info("total messagea in  queue--{}",count);
             log.info("init success");
         } catch (SchedulerException e) {
             log.error("printStackTrace ", e);

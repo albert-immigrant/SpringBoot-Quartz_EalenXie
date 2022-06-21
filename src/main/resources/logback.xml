@@ -195,10 +195,15 @@
         <port>5672</port>
         <username>guest</username>
         <password>guest</password>
-        <exchangeType>direct</exchangeType>
-        <exchangeName>amq.direct</exchangeName>
+     <!--   <exchangeType>direct</exchangeType>
+        <exchangeName>amq.direct</exchangeName>-->
+        <exchangeName>rabbit.log</exchangeName>
+<!--        <exchangeType>queue</exchangeType>-->
+<!--        <queueName>AmqpAppenderTest</queueName>-->
+        <applicationId>AmqpAppenderTest</applicationId>
         <applicationId>RabbitMq-IT-SE</applicationId>
-        <routingKeyPattern>%property{applicationId}.%c.%p</routingKeyPattern>
+<!--        <routingKeyPattern>%property{applicationId}.%c.%p</routingKeyPattern>-->
+        <routingKeyPattern>info</routingKeyPattern>
         <generateId>true</generateId>
         <charset>UTF-8</charset>
         <durable>true</durable>
